@@ -1,0 +1,172 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,tabularx,array,enumitem}
+\usepackage{tikz,xcolor,hyperref,fancyhdr}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\definecolor{navy}{HTML}{183651}
+\definecolor{teal}{HTML}{167A80}
+\definecolor{darkgrey}{HTML}{4E5F6C}
+\definecolor{lightteal}{HTML}{EAF3F2}
+\hypersetup{colorlinks=true,linkcolor=navy,citecolor=teal,urlcolor=teal,pdfauthor={Mohammad Amanlou -- exploratory research working draft},pdftitle={REFLEX 7.0: Topology-Incentive Frontier}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\color{darkgrey}REFLEX 7.0 | Technical research working draft}\fancyhead[R]{\footnotesize\color{darkgrey}22 Nov 2026}\fancyfoot[C]{\thepage}\setlength{\headheight}{14pt}
+\setlist[itemize]{leftmargin=1.3em,topsep=2pt,itemsep=2pt}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\F}{\mathbb F_2}
+\newcommand{\Pc}{\mathcal P}
+\newcommand{\Odd}{\operatorname{Odd}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\cost}{\operatorname{cost}}
+\newcommand{\Dec}{\mathsf{Dec}}
+\newcommand{\deltaP}{\delta_\rho}
+\title{\vspace{-1.0cm}\color{navy}\textbf{REFLEX 7.0: The Topology--Incentive Frontier}\\[3pt]
+\large Exact Coalition Forgery Costs and Conditional Economic Implementation for Delegated Multi-Agent Audits}
+\author{Mohammad Amanlou\\\small University of Tehran \textbar{} Exploratory research note}
+\date{22 November 2026}
+\begin{document}
+\maketitle
+\vspace{-0.8cm}
+\begin{center}
+\footnotesize\color{teal}\textbf{Code, test suite, and versioned working notes:}\quad \url{https://github.com/MohammadAmanlou/REFLEX}
+\end{center}
+\noindent\fcolorbox{teal!40}{lightteal}{\parbox{0.955\linewidth}{\small
+\textbf{Scope and research-integrity statement.} This is a \emph{mathematical working paper}, not a submission-ready, peer-reviewed, or historically novel result. Theorems are established under explicit finite binary models; the accompanying code tests small synthetic instances. Strong-equilibrium claims are conditional on independently auditable tampering attribution and enforceable deposits. No LLM benchmark, economic field study, or scalable joint-optimization method has yet been completed.}}
+\vspace{6pt}
+
+\begin{abstract}
+A graph-based audit can tolerate Byzantine errors associated with several AI delegates, yet fail when one human principal controls many delegates. Earlier REFLEX-P characterized this vulnerability by a principal-labelled odd-cycle transversal threshold $\tau_\Pc>2k$. This note advances from a \emph{fault-count} certificate to a \emph{weighted coalition-forgery} frontier. For a $k$-explanation decoder, we give an exact combinatorial characterization of the minimum owner-weight required to induce a \emph{wrong certificate}, prove the tight homogeneous threshold $\tau_\Pc-k$, and distinguish it from the cheaper possibility of forcing abstention. Under an explicit, nontrivial external provenance and enforcement assumption, this frontier yields a sufficient coalition-deterrence mechanism and a finite covering LP for audit probabilities. Exact transcript enumeration, constructive forgeries, and synthetic linear-program tests pass; the model deliberately does \emph{not} establish truth in all equilibria of an unconstrained reporting game. We identify the harder publishable research target: truthful strategic audit certification without assuming the required trust anchor for free, with scalable synthesis and multi-principal agent benchmarks.
+\end{abstract}
+
+\section{Why this is not merely a bigger version of REFLEX-P}
+The prior REFLEX-T result counted corrupted \emph{edges}, and REFLEX-P correctly replaced that with corrupted \emph{ultimate principals}. This distinction is important, but related signed-graph, coding, and group-synchronization theory already handles many robustness phenomena \cite{lerman2021,group2026}. Similarly, delegation games \cite{sourbut2024}, social contracts \cite{davoust2020}, strategic auditing \cite{das2026}, and learning from strategic agents \cite{cacciamani2024} are established fields. Proof-Carrying Contracts \cite{ciliberto2026} handles enforceable operational commitments, while delegated information provision \cite{bilotta2026} already couples control over experiments with incentives. Collusion-oriented LLM evaluation has a recent precedent in COLOSSEUM \cite{colosseum2026}.\par
+The remaining concrete weakness of REFLEX-P was \emph{endogeneity}: it postulated $k$ corrupted principals but did not say what makes manipulation by a larger coalition unattractive. We now derive the \emph{exact cost} of breaking its decision rule, connect that cost to a conditional coalition-incentive model, and carefully delimit which stronger game-theoretic guarantees remain open.
+
+\section{A fully specified restricted audit game}
+Let $G=(V,E)$ be a finite undirected graph of delegated contexts, and let $\rho:V\to\Pc$ map each context to its authentic ultimate principal. The trusted binary sensitivity vector is $b\in\F^E$. In an episode, the unknown state $h\in\F$, arbitrary nuisance offsets $s\in\F^V$, and tampering vector $\eta\in\F^E$ generate
+\begin{equation}\label{eq:binary}
+ y=Ds\oplus bh\oplus\eta,
+\end{equation}
+where $D$ is the binary edge--vertex incidence matrix. For $T\subseteq\Pc$, write $\deltaP(T)$ for all edges incident to some node owned by a member of $T$. A coalition $T$ can choose an arbitrary error supported on $\deltaP(T)$. This is a \emph{capability} assumption, not an inference from cryptographic signatures.\par
+Define $\tau_\Pc=\min\{|S|: b|_{G-\rho^{-1}(S)}\in\operatorname{im}D|_{G-\rho^{-1}(S)}\}$, equivalently the fewest authentic principals whose deletion destroys every $b$-odd cycle. For an integer explanation budget $k$, let
+\begin{equation}\label{eq:plausible}
+ \mathcal H_k(y)=\left\{h\in\F:\exists s,\, W\subseteq\Pc,\,|W|\le k,\ \supp(y\oplus Ds\oplus bh)\subseteq\deltaP(W)\right\}.
+\end{equation}
+Our decoder $\Dec_k(y)$ returns $h$ if $\mathcal H_k(y)=\{h\}$ and abstains ($\bot$) otherwise. The earlier REFLEX-P theorem says $\tau_\Pc>2k$ makes the true $h$ uniquely identifiable under attacks by at most $k$ principals. All results below assume this condition, so $\Dec_k(Ds\oplus bh)=h$ initially.
+
+\section{Exact cost of a \emph{wrong} certificate}
+Let $w_p>0$ be the effective cost of having principal $p$ participate in a report-corruption coalition. Importantly, $w_p$ is not assumed equal across principals. For two \emph{disjoint} sets $T,W\subseteq\Pc$ define a structural forgery witness by
+\begin{equation}\label{eq:witness}
+ |W|\le k,\qquad b|_{G-\rho^{-1}(T\cup W)}\in\operatorname{im}D|_{G-\rho^{-1}(T\cup W)}.
+\end{equation}
+The attacked principals $T$ change reports; the $k$ principals $W$ are the decoder's \emph{hypothesized} explanation for the wrong state and need not actually collude. Define the weighted forgery frontier
+\begin{equation}\label{eq:mu}
+ \boxed{\mu_k(w)=\min_{\substack{T,W\subseteq\Pc,\ T\cap W=\varnothing\\ |W|\le k,\ \text{condition }\eqref{eq:witness}}}\sum_{p\in T}w_p.}
+\end{equation}
+
+\begin{theorem}[Exact owner-weighted wrong-certificate frontier]\label{thm:mu}
+If $\tau_\Pc>2k$, then for any nuisance offsets and either true state, the minimum weight of a coalition able to make $\Dec_k$ output the \emph{wrong} state is exactly $\mu_k(w)$.
+\end{theorem}
+\begin{proof}
+First suppose the true state is $0$ (the case $1$ is symmetric). Subtract $Ds$ from the transcript, which does not change explainability. Let coalition $T$ generate a tampered transcript $y=\eta$ with $\supp\eta\subseteq\deltaP(T)$ and suppose $\Dec_k(y)=1$. By definition, there exist offsets $x$ and $W$ with $|W|\le k$ such that $\supp(y\oplus Dx\oplus b)\subseteq\deltaP(W)$. On all edges outside $\deltaP(T\cup W)$, we have $b=Dx$; thus the signed graph after deleting $T\cup W$ is balanced. Removing any intersection between $W$ and $T$ preserves this property and does not enlarge $W$. Therefore the actual coalition weight is at least the minimum in \eqref{eq:mu}.\par
+Conversely take a minimizing disjoint pair $(T,W)$. By signed balance, there exists $x$ such that $d=b\oplus Dx$ is supported inside $\deltaP(T\cup W)$. Define $\eta_0$ to equal $d$ on edges incident to $T$ and zero elsewhere, and put $\eta_1=d\oplus\eta_0$. The former is a permissible actual attack by $T$ and the latter is supported on $\deltaP(W)$. The same observed transcript $y=\eta_0$ is consistent with the true state $0$, honest offsets zero, and attacker $T$, and also with false state $1$, offsets $x$, and an explanation involving at most $k$ owners $W$. If the true state were \emph{also} $k$-explainable, the previous theorem's two-explanation argument would yield $\tau_\Pc\le2k$, a contradiction. Thus $\mathcal H_k(y)=\{1\}$, so the false state is actually certified. This construction achieves cost $w(T)=\mu_k(w)$.\end{proof}
+
+\begin{corollary}[Tight homogeneous threshold]\label{cor:hom}
+For $w_p=1$, the minimum number of principals that can induce a wrong certificate is exactly
+\[\boxed{\mu_k(\mathbf1)=\tau_\Pc-k.}\]
+\end{corollary}
+\begin{proof}Every witness pair must delete at least $\tau_\Pc$ owners, so $|T|\ge\tau_\Pc-k$. Conversely split any minimum transversal of size $\tau_\Pc$ into a decoder set $W$ with $k$ owners and attacker set $T$ with $\tau_\Pc-k$ owners.\end{proof}
+
+\paragraph{Do not confuse forgery with denial of service.} Define the general decision-disruption cost
+\begin{equation}\label{eq:nu}
+ \nu_k(w)=\min_{\eta:\Dec_k(\eta)\ne0}\min_{T:\supp\eta\subseteq\deltaP(T)}w(T),
+\end{equation}
+with the true state normalized to $0$. Then $\nu_k(w)\le\mu_k(w)$. Four disjoint $b$-odd triangles with independent owners, $k=1$, and unit costs have $\tau_\Pc=4$: two manipulated triangles can force abstention, while three are needed for a false certificate. Hence $\nu_1=2$ and $\mu_1=3$. \emph{A mechanism deterring only false certificates may still be vulnerable to strategic abstention.}
+
+\section{Conditional coalition-stability theorem}
+To connect these combinatorial quantities to a strategic mechanism, we state \emph{all} additional assumptions rather than hide them in the term ``audit''.
+\begin{enumerate}
+\item \textbf{Authenticated provenance.} Each principal's attributable report modifications can be detected by a post-commit, independently operated audit with probability $q_p$ whenever that principal changes at least one raw measurement. The audit checks an authenticated raw observation log; it is not allowed to assume knowledge of $h$. A signed but semantically false raw log does \emph{not} satisfy this assumption.
+\item \textbf{Enforceable penalties.} An audited manipulation by $p$ forfeits a bond $F_p$; the random audit choice is concealed until after the report commitment. Penalties are additive in expectation and are genuinely collectible. The cost is $w_p=q_pF_p$.
+\item \textbf{Coalition payoff model.} Principals can make arbitrary internal side payments. Apart from audit penalties, their combined utility depends only on the decoder's final outcome. The aggregate increase available to \emph{any} coalition from changing that outcome, relative to the honest baseline, is at most $B$; there are no positive benefits to lying when the outcome is unchanged. Honest reporting itself is costless.
+\end{enumerate}
+
+\begin{theorem}[Economic deterrence, with exact scope]\label{thm:deterrence}
+Under the assumptions above, if $\mu_k(qF)>B$, no coalition can profitably deviate from honest reporting \emph{to induce a wrong certificate}. If instead $\nu_k(qF)>B$, then honest reporting is a coalition-stable (strong-equilibrium) profile in the report-only game under transferable coalition utility. Neither condition proves that \emph{all} equilibria are truthful.
+\end{theorem}
+\begin{proof}
+For every deviation inducing a wrong certificate, Theorem~\ref{thm:mu} implies that the sum of the deviating principals' expected audit penalties is at least $\mu_k(qF)>B$. Since any collective change in their gross outcome utility is bounded by $B$, their net total utility decreases, so no redistribution of transferable utility can make the coalition better off. Replacing $\mu_k$ by $\nu_k$ applies the same argument to \emph{every} outcome-changing deviation. A deviation leaving the outcome unchanged generates no positive gross benefit and nonnegative penalties; hence it cannot strictly improve aggregate coalition utility. This excludes all profitable coalition deviations from the honest profile. It does not compare against other report profiles or imply uniqueness of equilibrium.\end{proof}
+
+\paragraph{Why the audit assumption matters.} If the verifier sees only freely chosen reports and all principals may collude without any independent provenance, two states can generate identical transcripts by taking $\eta=bh$, so no report-only mechanism can guarantee correct state certification. A verifier that can directly read the unknown $h$ would trivialize the problem instead. The economically meaningful middle ground is an authenticated but \emph{costly} spot-check of underlying per-owner measurements, which requires separate engineering and empirical validation.
+
+\section{A finite, exact audit-policy synthesis baseline}
+For fixed $G,b,\rho,k$ and fixed forfeitable bonds $F_p$, let $q_p\in[0,1]$ be secret post-commit audit probabilities and let $c_p$ be the cost of auditing principal $p$ once. To deter \emph{wrong certificates}, solve the covering linear program
+\begin{align}\label{eq:LP}
+ \min_{0\le q_p\le1}\quad &\sum_{p\in\Pc}c_pq_p\\
+ \mathrm{s.t.}\quad &\sum_{p\in T}F_pq_p\ge B+\varepsilon,\quad\forall T\in\mathcal A_k,\nonumber
+\end{align}
+where $\mathcal A_k$ contains every inclusion-minimal $T$ for which \emph{some} decoder-explanation set $W$, $|W|\le k$, satisfies \eqref{eq:witness}. Nonnegative $q$ makes nonminimal attack sets redundant. The constraints are equivalent to $\mu_k(qF)\ge B+\varepsilon$. This LP can be solved efficiently \emph{given} its constraints, but generating $\mathcal A_k$ is exponential in the supplied exact baseline and is \emph{not} a scalable algorithmic contribution. The full-disruption analogue must instead constrain every attack that changes the output, including abstention.\par
+For three independent odd triangles, each vertex is separately owned, $k=1$, $F_p=5$, $B=4$, $\varepsilon=0.1$, and audit cost $c_p=1$. There are $27$ inclusion-minimal wrong-certificate coalitions (choose two triangles and one owner in each). The LP's symmetric optimum is
+\[q_p=0.41\ \forall p,\qquad \sum_pq_p=3.69,\qquad \mu_1(qF)=4.10>B.\]
+These are synthetic units, not dollar costs or real regulatory incentives. Higher bonds mechanically reduce required audit probability only if those bonds are credible, affordable, and enforceable.
+
+\section{Reproducibility and executed checks}
+The new script \texttt{reflex7\_economic\_frontier.py} contains: exact signed-balance feasibility; the $k$-explanation decoder; structural optimization of $\mu_k$; a constructive false-transcript generator; an \emph{independent} exhaustive transcript oracle; the distinct abstention test; and a SciPy/HiGHS covering-LP solver.\par
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}p{.37\linewidth}X@{}}\toprule
+\textbf{Check} & \textbf{Observed, executed result (22 Nov 2026)}\\\midrule
+Heterogeneous 3-triangle attack & $\tau=3$, $k=1$; minimal forgery cost $5$, matching exhaustive transcript enumeration; a concrete false transcript is generated.\\
+Unit-weight frontier & Minimum false-certification coalition size $\tau-k=2$.\\
+Abstention adversary & For four disjoint odd triangles, $\nu_1=2$, while $\mu_1=3$.\\
+Randomized cross-check & 103 eligible small owner-labelled instances: structural optimum = independently enumerated transcript optimum.\\
+Audit penalty certificate & Minimum expected wrong-certificate penalty $5$ exceeds synthetic gain bound $B=4$.\\
+Covering LP & 27 minimal adversarial coalition constraints; objective $3.690$, minimum expected attack penalty $4.100$.\\\bottomrule
+\end{tabularx}
+\end{center}
+Tests on tiny exact binary games are evidence for implementation correctness, not empirical validation on strategic LLMs or independent confirmation of historical novelty. The LP uses SciPy; the combinatorial model and exhaustive tests otherwise use Python's standard library.
+
+\section{Novelty audit: the difference from prior art}
+\begin{center}\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{.31\linewidth}X@{}}\toprule
+\textbf{Nearest precedent} & \textbf{What is still \emph{not} established by REFLEX 7.0}\\\midrule
+IJCAI 2024 delegation games \cite{sourbut2024} & We have not derived a general new delegation equilibrium theory or welfare guarantee.\\
+AIES 2020 social contracts \cite{davoust2020} & Our deposits are a restricted conditional payoff intervention, not a novel general contract representation.\\
+AAAI 2026 strategic auditing \cite{das2026} & Our finite LP is not shown to outperform state-of-the-art optimal auditing algorithms.\\
+ICLR 2024 multi-agent information acquisition \cite{cacciamani2024} & We do not solve the general effort/reporting incentive problem.\\
+Signed graph / robust synchronization \cite{lerman2021,group2026} & Weighted owner-support frontier is related to grouped corruption and code-distance methods; historical uniqueness is unproven.\\
+Proof-Carrying Contracts 2026 \cite{ciliberto2026} & Signatures or operational proof checks alone do not guarantee semantic accuracy of a measurement.\\
+COLOSSEUM 2026 \cite{colosseum2026} & No comparative LLM collusion benchmark has been run.\\\bottomrule
+\end{tabularx}
+\end{center}
+\textbf{Specific candidate research gap.} An efficient, identity-aware \emph{joint} selection of audit edges, accountable evidence checks, and incentive-compatible penalties that provides a valid principal-level outcome in the \emph{worst equilibrium} of a multi-principal reporting game, while correctly treating abstention, unverifiable sensors, and agent reorganization. A proof of this stronger statement is still missing and must \emph{not} be advertised as completed.
+
+\section{Research roadmap and publication requirements}
+\begin{enumerate}
+\item \textbf{Strategic model without circular trust.} Specify independently verifiable raw observations, provenance failure modes, entry/exit and agent cloning, collusive transferable payments, audit-avoidance opportunities, and multiple equilibria. Prove a nontrivial impossibility/implementation frontier without assuming a truth oracle.
+\item \textbf{Algorithmic advance.} Replace the exponential exact coalition enumeration with a sound cutting-plane/parameterized/approximation method; prove its complexity and competitive value against optimal auditing and graph augmentation baselines.
+\item \textbf{Statistical extension.} Replace binary reliable edges with noisy, heterogeneous, correlated observations, preserving time-uniform validity under adaptively chosen audits, owner merges and agent splitting; detect model misspecification rather than assuming it away.
+\item \textbf{Real evaluations.} Benchmark different owner distributions, Sybil agents, strategic manipulation, transferred side payments, dropout/abstention and genuine modern LLM agent frameworks. Report false certification, abstention, coalition size, owner cost, audit overhead, sample budgets, and independent replication. Compare to signed-group synchronization, strategic audit policies, and multi-agent collusion baselines.
+\end{enumerate}
+These are \emph{unsolved steps}. A top-conference submission would require successful theoretical results, solid baselines and credible empirical evidence, not merely more advanced language models or a longer document. The direction aligns with research on social contracts and institutional norms in multi-agent systems \cite{davoust2020}, but the proposed contribution is not a claim of supervisor support or funding.
+
+\section*{References (selected primary sources; verified URLs)}
+\begin{thebibliography}{99}\setlength{\itemsep}{2pt}
+\bibitem{sourbut2024} Sourbut, Hammond, and Wood. \emph{Cooperation and Control in Delegation Games}. IJCAI, 2024. \url{https://www.ijcai.org/proceedings/2024/26}.
+\bibitem{davoust2020} Davoust and Rovatsos. \emph{Social Contracts for Non-Cooperative Games}. AIES, 2020. \url{https://www.research.ed.ac.uk/en/publications/social-contracts-for-non-cooperative-games/}.
+\bibitem{das2026} Das, Yu, and Zhang. \emph{Optimally Auditing Adversarial Agents}. AAAI, 2026. \url{https://ojs.aaai.org/index.php/AAAI/article/download/38722/42684}.
+\bibitem{cacciamani2024} \emph{Online Information Acquisition: Hiring Multiple Agents}. ICLR, 2024. \url{https://proceedings.iclr.cc/paper_files/paper/2024/hash/6358cd0cd6607fdf4870595795eb1710-Abstract-Conference.html}.
+\bibitem{bilotta2026} Bilotta, Carnehl, and Preusser. \emph{Delegated Information Provision}. arXiv:2603.10867, revised 2026. \url{https://ideas.repec.org/p/arx/papers/2603.10867.html}.
+\bibitem{ciliberto2026} Ciliberto, Rudi, and Tassi. \emph{Proof-Carrying Contracts: Commitments AI Agents Cannot Break}. arXiv:2610.28484, 2026. \url{https://arxiv.org/abs/2610.28484}.
+\bibitem{lerman2021} Lerman and Shi. \emph{Robust Group Synchronization via Cycle-Edge Message Passing}. FoCM, 2021. \url{https://link.springer.com/article/10.1007/s10208-021-09532-w}.
+\bibitem{group2026} \emph{Higher-order group synchronization}. Journal of Applied and Computational Topology, 2026. \url{https://link.springer.com/article/10.1007/s40687-026-00627-w}.
+\bibitem{colosseum2026} \emph{COLOSSEUM: Auditing Collusion in Cooperative Multi-Agent Systems}. arXiv:2602.15198, 2026. \url{https://arxiv.org/abs/2602.15198}.
+\bibitem{contracts2024} \emph{Formal contracts mitigate social dilemmas in multi-agent reinforcement learning}. Autonomous Agents and Multi-Agent Systems, 2024. \url{https://doi.org/10.1007/s10458-024-09682-5}.
+\bibitem{theory2026} \emph{Combinatorial Contract Design: Recent Progress and Emerging Frontiers}. ICM/SIAM, 2026. \url{https://epubs.siam.org/doi/full/10.1137/25M1805588}.
+\end{thebibliography}
+\end{document}
