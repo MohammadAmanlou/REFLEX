@@ -19,6 +19,18 @@ This repository archives the REFLEX research prototypes built on 22 November 202
 
 The PDFs and LaTeX sources explicitly link back to this repository. Current main research note: **REFLEX 8.0**. Read [`docs/REFLEX8_README.md`](docs/REFLEX8_README.md) for exact assumptions, equilibrium-safety scope, and limitations.
 
+
+## REFLEX 9 working prototype: complementary witness assembly
+
+The code in [`src/reflex9_witness_assembly_game.py`](src/reflex9_witness_assembly_game.py) implements a **restricted, exact finite pure-Nash game** for witness fragments owned by multiple independent principals. It computes minimal owner cuts, enumerates corrupt-owner sets and pure Nash profiles, and contrasts completion-only prizes with individually paid, independently verifiable valid fragments. The [seven unit tests](tests/test_reflex9_witness_assembly.py) include a silent equilibrium despite a large completion prize, a robust two-witness example under one corrupted owner, and a single-owner-cut failure. Run:
+
+```bash
+python src/reflex9_witness_assembly_game.py
+python -m unittest discover -s tests -v
+```
+
+**Research-integrity boundary:** The evaluator fixes a false proposal; every owner identity and primitive fragment is assumed verifiable. Byzantine owners can withhold but not forge other owners' evidence. The script does **not** implement an unconstrained strategic equilibrium oracle, reliable sensor semantics, real LLM-agent behaviour, or the full proposed joint optimizer. The professor-facing proposal discusses these as research questions, not established experimental achievements.
+
 ## Quickstart
 
 Requires Python **3.10+** (CI uses Python 3.11). REFLEX-T and REFLEX-P rely only on the Python standard library. The early benchmark and REFLEX 7.0's small audit-policy LP require NumPy/SciPy.
