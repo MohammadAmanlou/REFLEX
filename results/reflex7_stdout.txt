@@ -1,0 +1,7 @@
+PASS: k=1, tau=3, heterogeneous exact wrong-certificate cost=5; attacker owners=(0, 3); decoder-explanation owners=(6,); forged transcript=000001001
+PASS: homogeneous tight threshold tau-k=2, witnessed by attacker owners=(0, 3)
+PASS: four owner-independent triangles, k=1: abstention by 2 owners, false certification requires >=3 owners; distinct strategic security thresholds
+PASS: 103 eligible random owner-labelled graph instances, exact weighted theorem = independent exhaustive transcript search
+PASS: conditional wrong-decision deterrence: min expected slashing=5.0 > maximum transferable wrong-outcome gain=4.0. Assumes independent audit attribution and enforceable bonds.
+PASS: fixed-topology audit LP, 27 minimal attacking coalitions; optimal sum audit probabilities=3.690; min expected attack penalty=4.100; all probabilities within [0,1]
+All REFLEX-7 *restricted-model* checks passed; no peer-reviewed novelty claim.
