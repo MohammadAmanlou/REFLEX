@@ -1,0 +1,8 @@
+PASS: 100 randomized small graphs, exhaustive cycle search and coset distance cross-check
+PASS: 3 edge-disjoint unbalanced cycles recover h for all 5120 style/error combinations per hypothesis
+path: vertices=3 edges=2, min-coset-distance=0, t_max=-1, least-odd-cycle-cost=inf, coset-sizes=[4, 4]
+triangle: vertices=3 edges=3, min-coset-distance=1, t_max=0, least-odd-cycle-cost=3, coset-sizes=[4, 4]
+K5-all-negative: vertices=5 edges=10, min-coset-distance=4, t_max=1, least-odd-cycle-cost=3, coset-sizes=[16, 16]
+K5, p=0.05: Pr(number of corrupt reports <=1)=0.913862 (certified correct under this event)
+K5 BSC exact nearest-coset (correct, abstain, error): (0.915652, 0.080788, 0.003559)
+PASS: all tests. This validates the restricted model, not literature novelty or LLM performance.

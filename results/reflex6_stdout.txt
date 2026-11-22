@@ -1,0 +1,6 @@
+PASS: 120 random owner-labeled graphs: complete transcript enumeration agrees with tau > 2k
+PASS: 2000 random node-offset + Byzantine-principal trials, unique correct hypothesis
+SHARED-HUB: d_edge=3; principal_tau=1; k=1 robust=False; destructive owner set=(0,)
+3 INDEPENDENT TRIANGLES: 9 authenticated owners tau=3, one real owner and 9 delegates tau=1
+EXACT AUDIT DESIGN: candidate_edges=12; k=1; minimum cost=21; selected_edges=[0, 1, 2, 3, 4, 5, 6, 7, 8]; candidates_evaluated=2523
+All restricted-model checks passed. No theorem is claimed new in the literature.

@@ -1,0 +1,4 @@
+# Only the early illustrative benchmark requires third-party packages.
+# The REFLEX-T and REFLEX-P verification programs use the standard library.
+numpy>=1.24,<3
+scipy>=1.10,<2

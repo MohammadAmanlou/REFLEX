@@ -1,0 +1,10 @@
+Unverifiable report: identical laws, worst-case error >= 1/2
+Audited laws: (0.15, 0.25) versus (0.75, 0.85)
+Separating gap: 0.5 Hoeffding sufficient n: 24
+Exact fixed-i.i.d. endpoint error probabilities: 0.00209405 0.00719965
+m=2: ex ante cost 2, diagnosis-adaptive cost 1, ratio 2:1
+m=4: ex ante cost 4, diagnosis-adaptive cost 1, ratio 4:1
+m=8: ex ante cost 8, diagnosis-adaptive cost 1, ratio 8:1
+m=16: ex ante cost 16, diagnosis-adaptive cost 1, ratio 16:1
+Partial interaction-design rank: 7 of 8
+PASS. No claim of empirical LLM superiority or novel publication.
