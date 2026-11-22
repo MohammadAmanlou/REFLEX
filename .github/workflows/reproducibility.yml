@@ -16,3 +16,5 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -r requirements.txt
       - run: bash reproduce.sh
+      - name: Check REFLEX 9 finite witness-game assumptions
+        run: python -m unittest discover -s tests -v
