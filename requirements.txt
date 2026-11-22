@@ -1,4 +1,5 @@
 # Only the early illustrative benchmark requires third-party packages.
 # The REFLEX-T and REFLEX-P verification programs use the standard library.
+# REFLEX 7.0 uses SciPy for its small fixed-topology audit covering LP.
 numpy>=1.24,<3
 scipy>=1.10,<2
