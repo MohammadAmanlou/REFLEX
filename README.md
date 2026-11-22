@@ -4,7 +4,7 @@
 **Repository:** https://github.com/MohammadAmanlou/REFLEX  
 **Status:** Exploratory mathematical research; **not peer reviewed**, **not a conference submission**, and **not evidence of accepted historical novelty**.
 
-This repository archives the REFLEX research prototypes built on 22 November 2026, progressing from equilibrium/evidence checks to topology-based audits through **principal-aware robustness and an exact topology–incentive frontier** for conditional coalition-deterrence research. The projects formalize *restricted* binary models and compare exact small-instance methods; they do **not** implement general equilibrium-robust, incentive-compatible multi-agent mechanisms or deployed LLM-agent evaluations.
+This repository archives the REFLEX research prototypes built on 22 November 2026, progressing from equilibrium/evidence checks to topology-based audits through **principal-aware robustness, a topology–incentive frontier, and no-state-oracle refutable certification**. The projects formalize *restricted* binary models and compare exact small-instance methods; they do **not** implement general equilibrium-robust, incentive-compatible multi-agent mechanisms or deployed LLM-agent evaluations.
 
 ## Research versions
 
@@ -15,7 +15,9 @@ This repository archives the REFLEX research prototypes built on 22 November 202
 | REFLEX-P / 6.0 — principal-aware audits | [`src/reflex6_principal_robustness.py`](src/reflex6_principal_robustness.py) | [`papers/REFLEX6_Principal_Aware_Audits.pdf`](papers/REFLEX6_Principal_Aware_Audits.pdf) ([LaTeX](papers/REFLEX6_Principal_Aware_Audits.tex)) | [`results/reflex6_stdout.txt`](results/reflex6_stdout.txt) |
 | **REFLEX 7.0 — topology–incentive frontier** | [`src/reflex7_economic_frontier.py`](src/reflex7_economic_frontier.py) | [`papers/REFLEX7_Topology_Incentive_Frontier.pdf`](papers/REFLEX7_Topology_Incentive_Frontier.pdf) ([LaTeX](papers/REFLEX7_Topology_Incentive_Frontier.tex)) | [`results/reflex7_stdout.txt`](results/reflex7_stdout.txt) |
 
-The PDFs and LaTeX sources explicitly link back to this repository. Current main research note: **REFLEX 7.0**. Read [`docs/REFLEX7_README.md`](docs/REFLEX7_README.md) for exact assumptions, conditional incentive claims, and limitations.
+| **REFLEX 8.0 — no-state-oracle refutable certification** | [`src/reflex8_refutable_certification.py`](src/reflex8_refutable_certification.py) | [`papers/REFLEX8_No_Oracle_Certification.pdf`](papers/REFLEX8_No_Oracle_Certification.pdf) ([LaTeX](papers/REFLEX8_No_Oracle_Certification.tex)) | [`results/reflex8_stdout.txt`](results/reflex8_stdout.txt) |
+
+The PDFs and LaTeX sources explicitly link back to this repository. Current main research note: **REFLEX 8.0**. Read [`docs/REFLEX8_README.md`](docs/REFLEX8_README.md) for exact assumptions, equilibrium-safety scope, and limitations.
 
 ## Quickstart
 
@@ -27,6 +29,7 @@ python src/reflex_equilibrium_authority_minibench.py
 python src/reflex_audit_topology_prototype.py
 python src/reflex6_principal_robustness.py
 python src/reflex7_economic_frontier.py
+python src/reflex8_refutable_certification.py
 ```
 
 Or run `bash reproduce.sh`, which records fresh output files and verifies their equality against the published results under the supported environment.
@@ -37,6 +40,8 @@ Or run `bash reproduce.sh`, which records fresh output files and verifies their 
 - **REFLEX-T:** 100 random small-graph cross-checks against exhaustive graph calculations; exhaustive verification of 3 edge-disjoint parity-sensitive cycles; exact binary-symmetric-channel computations.
 - **REFLEX-P:** 120 random owner-labelled graph checks against full transcript enumeration; 2,000 Byzantine-principal attack trials; a shared-hub versus independent-owner counterexample; a 12-edge exact audit-design optimum of 21 under the given toy costs.
 - **REFLEX 7.0:** exact weighted false-certificate cost; explicit forgery; 103 eligible random-graph checks against exhaustive transcript search; separate abstention threshold; 27-constraint audit LP with synthetic optimum 3.690. These are **restricted mathematical examples**; no general all-equilibria incentive-compatibility or LLM study has been established.
+
+- **REFLEX 8.0:** 180 exhaustive random small-graph transcript checks; exact detection/correction thresholds; 32 ambiguous attacked transcripts in the two-triangle safe-only regime; access-custody cut comparison and cost-2.2 toy grant design; pure Nash challenge-game counterexamples. This is NOT an all-equilibria proof for unrestricted reporting games or an LLM evaluation.
 
 All result counts are **mathematical/model-level tests**, not participant trials, model evaluations, independent scientific replication, or a claim of publication novelty. For full model assumptions, see the linked notes.
 
@@ -52,6 +57,7 @@ src/
   reflex_audit_topology_prototype.py
   reflex6_principal_robustness.py
   reflex7_economic_frontier.py
+  reflex8_refutable_certification.py
 papers/
   REFLEX_Audit_Topology_Research_Draft.tex
   REFLEX_Audit_Topology_Research_Draft.pdf
@@ -59,16 +65,20 @@ papers/
   REFLEX6_Principal_Aware_Audits.pdf
   REFLEX7_Topology_Incentive_Frontier.tex
   REFLEX7_Topology_Incentive_Frontier.pdf
+  REFLEX8_No_Oracle_Certification.tex
+  REFLEX8_No_Oracle_Certification.pdf
 results/
   reflex_eq_stdout.txt
   reflex_t_stdout.txt
   reflex6_stdout.txt
   reflex7_stdout.txt
+  reflex8_stdout.txt
 docs/
   REFLEX_T_README_original.md
   REFLEX6_README_original.md
   RESEARCH_INTEGRITY.md
   REFLEX7_README.md
+  REFLEX8_README.md
 ```
 
 ## Rebuilding reports
@@ -82,6 +92,8 @@ pdflatex -interaction=nonstopmode -halt-on-error REFLEX6_Principal_Aware_Audits.
 pdflatex -interaction=nonstopmode -halt-on-error REFLEX_Audit_Topology_Research_Draft.tex
 pdflatex -interaction=nonstopmode -halt-on-error REFLEX_Audit_Topology_Research_Draft.tex
 pdflatex -interaction=nonstopmode -halt-on-error REFLEX7_Topology_Incentive_Frontier.tex
+pdflatex -interaction=nonstopmode -halt-on-error REFLEX8_No_Oracle_Certification.tex
+pdflatex -interaction=nonstopmode -halt-on-error REFLEX8_No_Oracle_Certification.tex
 pdflatex -interaction=nonstopmode -halt-on-error REFLEX7_Topology_Incentive_Frontier.tex
 ```
 
@@ -89,4 +101,4 @@ This repository archives the source/results corresponding to the produced PDFs; 
 
 ## Scientific limitations
 
-The restricted-model proofs are not evidence that the underlying graph/coding results are historically new. The central missing research steps are: a complete all-equilibria strategic multi-principal implementability theorem without circular trust, a practical scalable mechanism, real-world agent experiments, contemporary baselines, and independent novelty and proof review. See [`docs/RESEARCH_INTEGRITY.md`](docs/RESEARCH_INTEGRITY.md) before describing any result publicly.
+The restricted-model proofs are not evidence that the underlying graph/coding results are historically new. The central missing research steps are: an unrestricted all-equilibria strategic multi-principal truth-elicitation theorem without any local evidence assumptions, a practical scalable mechanism, real-world agent experiments, contemporary baselines, and independent novelty and proof review. See [`docs/RESEARCH_INTEGRITY.md`](docs/RESEARCH_INTEGRITY.md) before describing any result publicly.

@@ -1,0 +1,14 @@
+REFLEX-8 reproducibility audit: PASS
+Random graph/transcript exhaustive checks: 180/180
+Random instances by regime: {'impossible': 145, 'safe_only': 0, 'full_recovery': 35}
+two_triangle_tau: 2
+k: 1
+three_triangle_tau: 3
+single_custodian_cut: 1
+independent_custodian_cut: 2
+challenge_equilibria: 1
+weak_bounty_unsafe_equilibria: 1
+two_triangle_ambiguous_attack_transcripts: 32
+least_cost_robust_custody: 2.2
+chosen_custody_grants: 2
+Status: restricted binary model; NO external peer review, NO LLM trial, NO historical priority claim.
